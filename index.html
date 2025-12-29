@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG and Knowledge Workflows</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">RAG and Knowledge Workflows</div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#foundations" class="nav-link">Foundations</a></li>
+                <li><a href="#ingestion" class="nav-link">Ingestion</a></li>
+                <li><a href="#retrieval" class="nav-link">Retrieval</a></li>
+                <li><a href="#advanced" class="nav-link">Advanced</a></li>
+                <li><a href="#quality" class="nav-link">Quality & Production</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">RAG and Knowledge Workflows</h1>
+            <p class="hero-subtitle">A Comprehensive Guide to Retrieval-Augmented Generation</p>
+            <div class="hero-description">
+                <p>Master the complete pipeline from data ingestion to production deployment. Learn how RAG solves LLM limitations and enables enterprise knowledge management.</p>
+            </div>
+            <a href="#foundations" class="cta-button">Start Learning</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Section 1: Core Foundations -->
+        <section id="foundations" class="section">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Core Foundations</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">What is RAG and Why It Exists</h3>
+                <div class="card-content">
+                    <p><strong>Retrieval-Augmented Generation (RAG)</strong> is a technique that enhances Large Language Models (LLMs) by providing them with external knowledge sources during inference. This addresses critical limitations of plain LLMs:</p>
+                    
+                    <div class="info-box warning">
+                        <h4>Limitations of Plain LLMs</h4>
+                        <ul>
+                            <li><strong>Hallucinations:</strong> LLMs can generate plausible-sounding but factually incorrect information when they lack specific knowledge</li>
+                            <li><strong>Stale Knowledge:</strong> Training data has a cutoff date, making LLMs unaware of recent events or updates</li>
+                            <li><strong>No Source Attribution:</strong> Cannot cite where information came from, making verification difficult</li>
+                            <li><strong>Limited Context:</strong> Knowledge is frozen at training time, cannot access real-time or proprietary data</li>
+                            <li><strong>Cost of Retraining:</strong> Updating knowledge requires expensive full model retraining</li>
+                        </ul>
+                    </div>
+
+                    <p>RAG solves these problems by:</p>
+                    <ul>
+                        <li>Retrieving relevant documents from an external knowledge base</li>
+                        <li>Augmenting the prompt with retrieved context</li>
+                        <li>Generating answers grounded in the provided context</li>
+                        <li>Enabling source attribution and citation</li>
+                        <li>Allowing real-time knowledge updates without model retraining</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Basic RAG Loop</h3>
+                <div class="card-content">
+                    <p>The fundamental RAG process follows this flow:</p>
+                    <div class="flow-diagram">
+                        <div class="flow-step">
+                            <div class="flow-icon">1</div>
+                            <h4>Query</h4>
+                            <p>User submits a question or request</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">2</div>
+                            <h4>Retrieve</h4>
+                            <p>Search knowledge base for relevant documents</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">3</div>
+                            <h4>Augment</h4>
+                            <p>Combine query with retrieved context in prompt</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">4</div>
+                            <h4>Generate</h4>
+                            <p>LLM produces answer using augmented context</p>
+                        </div>
+                    </div>
+
+                    <h4>RAG vs Fine-tuning vs Tools/Callouts</h4>
+                    <div class="comparison-table">
+                        <div class="comparison-row header">
+                            <div class="comparison-cell">Approach</div>
+                            <div class="comparison-cell">Use Case</div>
+                            <div class="comparison-cell">Pros</div>
+                            <div class="comparison-cell">Cons</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>RAG</strong></div>
+                            <div class="comparison-cell">Dynamic knowledge, citations needed, frequent updates</div>
+                            <div class="comparison-cell">No retraining, source attribution, real-time updates</div>
+                            <div class="comparison-cell">Retrieval latency, context limits, retrieval quality dependency</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Fine-tuning</strong></div>
+                            <div class="comparison-cell">Task-specific behavior, domain adaptation, style transfer</div>
+                            <div class="comparison-cell">Better task performance, smaller models possible</div>
+                            <div class="comparison-cell">Expensive, requires data, knowledge frozen, no citations</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Tools/Callouts</strong></div>
+                            <div class="comparison-cell">Real-time data, API calls, structured operations</div>
+                            <div class="comparison-cell">Live data access, structured outputs, function calling</div>
+                            <div class="comparison-cell">API dependencies, error handling complexity, latency</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Prerequisites: Embeddings and Vector Similarity</h3>
+                <div class="card-content">
+                    <p><strong>Embeddings</strong> are dense vector representations of text that capture semantic meaning. Similar texts have similar embeddings, enabling semantic search.</p>
+
+                    <h4>Vector Similarity Metrics</h4>
+                    <div class="code-block">
+                        <div class="code-header">Similarity Metrics</div>
+                        <pre><code>Cosine Similarity: cos(θ) = (A · B) / (||A|| × ||B||)
+- Range: -1 to 1 (typically 0 to 1 for normalized vectors)
+- Measures angle between vectors
+- Best for normalized embeddings
+- Ignores vector magnitude
+
+Dot Product: A · B = Σ(Ai × Bi)
+- Range: -∞ to +∞
+- Considers both direction and magnitude
+- Faster computation
+- Requires same embedding space
+
+Euclidean Distance: d = √Σ(Ai - Bi)²
+- Range: 0 to +∞
+- Measures straight-line distance
+- Lower = more similar
+- Can be converted to similarity: 1 / (1 + distance)</code></pre>
+                    </div>
+
+                    <h4>Sparse vs Dense Retrieval</h4>
+                    <div class="info-box">
+                        <h4>Sparse Retrieval (Keyword-based)</h4>
+                        <ul>
+                            <li><strong>Examples:</strong> BM25, TF-IDF, keyword matching</li>
+                            <li><strong>How it works:</strong> Creates sparse vectors based on term frequency</li>
+                            <li><strong>Pros:</strong> Fast, interpretable, good for exact matches</li>
+                            <li><strong>Cons:</strong> Misses synonyms, no semantic understanding, vocabulary mismatch</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Dense Retrieval (Semantic)</h4>
+                        <ul>
+                            <li><strong>Examples:</strong> Sentence-BERT, OpenAI embeddings, Cohere embeddings</li>
+                            <li><strong>How it works:</strong> Neural networks create dense vectors capturing meaning</li>
+                            <li><strong>Pros:</strong> Semantic understanding, handles synonyms, cross-lingual</li>
+                            <li><strong>Cons:</strong> Computationally expensive, requires training, less interpretable</li>
+                        </ul>
+                    </div>
+
+                    <h4>Basic NLP Concepts</h4>
+                    <ul>
+                        <li><strong>Tokenization:</strong> Breaking text into tokens (words, subwords, or characters) that models can process</li>
+                        <li><strong>Transformers:</strong> Neural architecture using self-attention to understand relationships between tokens</li>
+                        <li><strong>Attention:</strong> Mechanism allowing models to focus on relevant parts of input when generating output</li>
+                        <li><strong>LLM Inference:</strong> Process of generating text from a trained model, involving forward passes through neural networks</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Data & Knowledge Ingestion -->
+        <section id="ingestion" class="section">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Data & Knowledge Ingestion</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Knowledge Sources and Formats</h3>
+                <div class="card-content">
+                    <p>RAG systems can ingest knowledge from diverse sources:</p>
+
+                    <div class="source-grid">
+                        <div class="source-item">
+                            <h4>📄 Documents</h4>
+                            <ul>
+                                <li>PDFs (research papers, manuals, reports)</li>
+                                <li>Word documents (.docx, .doc)</li>
+                                <li>Markdown files</li>
+                                <li>Plain text files</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>🌐 Web Content</h4>
+                            <ul>
+                                <li>HTML pages</li>
+                                <li>Wikis (Confluence, MediaWiki)</li>
+                                <li>Blog posts</li>
+                                <li>Documentation sites</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>💬 Communication</h4>
+                            <ul>
+                                <li>Support tickets</li>
+                                <li>Email threads</li>
+                                <li>Slack/Teams messages</li>
+                                <li>Chat logs</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>🗄️ Databases</h4>
+                            <ul>
+                                <li>SQL databases</li>
+                                <li>NoSQL stores</li>
+                                <li>Data warehouses</li>
+                                <li>Knowledge bases</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>🔌 APIs</h4>
+                            <ul>
+                                <li>REST APIs</li>
+                                <li>GraphQL endpoints</li>
+                                <li>Webhooks</li>
+                                <li>Real-time streams</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>📊 Logs & Events</h4>
+                            <ul>
+                                <li>Application logs</li>
+                                <li>Event streams</li>
+                                <li>Monitoring data</li>
+                                <li>Audit trails</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>Data Structure Types</h4>
+                    <div class="info-box">
+                        <h4>Structured Data</h4>
+                        <p>Well-defined schema (tables, JSON with fixed structure). Examples: databases, CSV files, API responses with schemas.</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>Unstructured Data</h4>
+                        <p>No predefined format (free text, images, audio). Examples: documents, emails, social media posts.</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>Semi-structured Data</h4>
+                        <p>Some structure but flexible schema (JSON, XML, HTML). Examples: web pages, API responses, configuration files.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Ingestion Pipelines</h3>
+                <div class="card-content">
+                    <h4>Batch vs Streaming</h4>
+                    <div class="comparison-table">
+                        <div class="comparison-row header">
+                            <div class="comparison-cell">Approach</div>
+                            <div class="comparison-cell">When to Use</div>
+                            <div class="comparison-cell">Characteristics</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Batch Processing</strong></div>
+                            <div class="comparison-cell">Initial load, periodic updates, large datasets</div>
+                            <div class="comparison-cell">Processes data in chunks, scheduled runs, higher throughput, simpler error handling</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Streaming</strong></div>
+                            <div class="comparison-cell">Real-time updates, event-driven systems, low latency requirements</div>
+                            <div class="comparison-cell">Continuous processing, immediate updates, lower latency, more complex state management</div>
+                        </div>
+                    </div>
+
+                    <h4>ETL/ELT Patterns for RAG</h4>
+                    <div class="flow-diagram vertical">
+                        <div class="flow-step">
+                            <div class="flow-icon">E</div>
+                            <h4>Extract</h4>
+                            <p>Pull data from sources (APIs, databases, files)</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">T</div>
+                            <h4>Transform</h4>
+                            <p>Clean, chunk, embed, add metadata</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">L</div>
+                            <h4>Load</h4>
+                            <p>Store in vector database with metadata</p>
+                        </div>
+                    </div>
+
+                    <p><strong>Connectors:</strong> Pre-built integrations for common sources (S3, SharePoint, Confluence, Slack, etc.) that handle authentication, pagination, and format conversion.</p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Document Modeling</h3>
+                <div class="card-content">
+                    <h4>Chunking Strategies</h4>
+                    
+                    <div class="info-box">
+                        <h4>Fixed Window Chunking</h4>
+                        <p>Split documents into fixed-size chunks (e.g., 512 tokens).</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Simple, predictable, easy to implement</li>
+                            <li><strong>Cons:</strong> May break sentences/paragraphs, loses context</li>
+                            <li><strong>Use when:</strong> Uniform document structure, simple use cases</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Sliding Window Chunking</h4>
+                        <p>Fixed-size chunks with overlap between adjacent chunks.</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Preserves context at boundaries, reduces information loss</li>
+                            <li><strong>Cons:</strong> More storage, potential redundancy</li>
+                            <li><strong>Use when:</strong> Context continuity is important</li>
+                            <li><strong>Overlap:</strong> Typically 10-20% of chunk size (e.g., 100 tokens overlap for 512-token chunks)</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Semantic Chunking</h4>
+                        <p>Split based on semantic boundaries (sentences, paragraphs, sections).</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Preserves meaning, better retrieval quality</li>
+                            <li><strong>Cons:</strong> Variable chunk sizes, more complex</li>
+                            <li><strong>Use when:</strong> Quality is critical, documents have clear structure</li>
+                            <li><strong>Methods:</strong> Sentence transformers, topic modeling, section detection</li>
+                        </ul>
+                    </div>
+
+                    <h4>Chunk Size and Overlap Trade-offs</h4>
+                    <ul>
+                        <li><strong>Smaller chunks (128-256 tokens):</strong> More precise retrieval, better for specific facts, but may miss context</li>
+                        <li><strong>Medium chunks (512-1024 tokens):</strong> Balance between precision and context, most common choice</li>
+                        <li><strong>Larger chunks (2048+ tokens):</strong> More context, better for complex reasoning, but less precise retrieval</li>
+                        <li><strong>Overlap considerations:</strong> Higher overlap improves context continuity but increases storage and processing costs</li>
+                    </ul>
+
+                    <h4>Metadata Design</h4>
+                    <div class="code-block">
+                        <div class="code-header">Example Metadata Schema</div>
+                        <pre><code>{
+  "source": "document_url_or_id",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "doc_type": "pdf|html|ticket|api",
+  "language": "en|es|fr|...",
+  "access_control": {
+    "roles": ["admin", "engineer"],
+    "departments": ["engineering"],
+    "tenants": ["company_a"]
+  },
+  "quality_score": 0.95,
+  "chunk_index": 3,
+  "total_chunks": 15,
+  "section": "introduction",
+  "author": "john.doe@company.com",
+  "last_updated": "2024-01-10T08:00:00Z"
+}</code></pre>
+                    </div>
+
+                    <p><strong>Key Metadata Fields:</strong></p>
+                    <ul>
+                        <li><strong>Source:</strong> Origin of the document for citation and traceability</li>
+                        <li><strong>Timestamp:</strong> When document was created/updated for freshness tracking</li>
+                        <li><strong>Access Control Tags:</strong> For row-level security and multi-tenancy</li>
+                        <li><strong>Doc Type:</strong> Enables type-specific processing and filtering</li>
+                        <li><strong>Language:</strong> For multilingual systems and language-specific retrieval</li>
+                        <li><strong>Quality Scores:</strong> Confidence metrics for ranking and filtering</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Embedding Pipelines</h3>
+                <div class="card-content">
+                    <h4>Embedding Model Choice</h4>
+                    
+                    <div class="info-box">
+                        <h4>General-Purpose Models</h4>
+                        <ul>
+                            <li><strong>OpenAI text-embedding-ada-002:</strong> 1536 dimensions, good general performance</li>
+                            <li><strong>OpenAI text-embedding-3-small/large:</strong> Latest models with better performance</li>
+                            <li><strong>Cohere embed-english-v3.0:</strong> 1024 dimensions, strong semantic understanding</li>
+                            <li><strong>Sentence-BERT (all-MiniLM-L6-v2):</strong> 384 dimensions, fast and efficient</li>
+                            <li><strong>Use when:</strong> General knowledge, diverse domains, standard use cases</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Domain-Specific Models</h4>
+                        <ul>
+                            <li><strong>BioBERT:</strong> Biomedical domain</li>
+                            <li><strong>Legal-BERT:</strong> Legal documents</li>
+                            <li><strong>SciBERT:</strong> Scientific papers</li>
+                            <li><strong>CodeBERT:</strong> Programming code</li>
+                            <li><strong>Use when:</strong> Specialized domain, technical jargon, domain-specific terminology</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Multilingual Models</h4>
+                        <ul>
+                            <li><strong>multilingual-e5-base/large:</strong> Supports 100+ languages</li>
+                            <li><strong>paraphrase-multilingual-MiniLM:</strong> Cross-lingual understanding</li>
+                            <li><strong>Use when:</strong> International content, cross-lingual search, global knowledge bases</li>
+                        </ul>
+                    </div>
+
+                    <h4>Offline vs On-the-Fly Embedding</h4>
+                    <div class="comparison-table">
+                        <div class="comparison-row header">
+                            <div class="comparison-cell">Approach</div>
+                            <div class="comparison-cell">When to Use</div>
+                            <div class="comparison-cell">Trade-offs</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Offline Embedding</strong></div>
+                            <div class="comparison-cell">Batch ingestion, stable documents, large-scale systems</div>
+                            <div class="comparison-cell">Faster queries, cost-effective, but requires re-embedding for updates</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>On-the-Fly Embedding</strong></div>
+                            <div class="comparison-cell">Real-time updates, dynamic content, small-scale systems</div>
+                            <div class="comparison-cell">Always fresh, flexible, but slower queries and higher costs</div>
+                        </div>
+                    </div>
+
+                    <h4>Embedding Versioning</h4>
+                    <p>When updating embedding models or document schemas, maintain version tracking:</p>
+                    <ul>
+                        <li><strong>Model Version:</strong> Track which embedding model was used (e.g., "text-embedding-ada-002-v1")</li>
+                        <li><strong>Schema Version:</strong> Track metadata schema changes</li>
+                        <li><strong>Migration Strategy:</strong> Gradual migration, dual indexing, or full re-embedding</li>
+                        <li><strong>Backward Compatibility:</strong> Support queries against old embeddings during transition</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Retrieval & RAG Architectures -->
+        <section id="retrieval" class="section">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Retrieval & RAG Architectures</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Retrieval Building Blocks</h3>
+                <div class="card-content">
+                    <h4>Vector Stores</h4>
+                    
+                    <div class="source-grid">
+                        <div class="source-item">
+                            <h4>FAISS (Facebook AI Similarity Search)</h4>
+                            <ul>
+                                <li>Open-source library by Meta</li>
+                                <li>In-memory or disk-based</li>
+                                <li>Supports GPU acceleration</li>
+                                <li>Best for: Research, prototyping, self-hosted</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Pinecone</h4>
+                            <ul>
+                                <li>Managed vector database service</li>
+                                <li>Auto-scaling, high availability</li>
+                                <li>Metadata filtering</li>
+                                <li>Best for: Production, managed infrastructure</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Weaviate</h4>
+                            <ul>
+                                <li>Open-source vector database</li>
+                                <li>GraphQL API</li>
+                                <li>Built-in ML models</li>
+                                <li>Best for: Complex queries, graph + vector</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>pgvector</h4>
+                            <ul>
+                                <li>PostgreSQL extension</li>
+                                <li>SQL + vector search</li>
+                                <li>ACID transactions</li>
+                                <li>Best for: Existing PostgreSQL infrastructure</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Chroma</h4>
+                            <ul>
+                                <li>Embedding database</li>
+                                <li>Simple Python API</li>
+                                <li>Lightweight</li>
+                                <li>Best for: Development, small-scale</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Qdrant</h4>
+                            <ul>
+                                <li>Vector similarity search engine</li>
+                                <li>REST API</li>
+                                <li>Payload filtering</li>
+                                <li>Best for: Production, high performance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>Retrieval Techniques</h4>
+                    <div class="info-box">
+                        <h4>Top-K Retrieval</h4>
+                        <p>Retrieve the K most similar documents based on similarity score. Common values: K=5 to K=20.</p>
+                        <ul>
+                            <li><strong>Higher K:</strong> More context, but may include irrelevant docs</li>
+                            <li><strong>Lower K:</strong> More focused, but may miss relevant information</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Score Thresholds</h4>
+                        <p>Filter results below a similarity threshold (e.g., only return docs with similarity > 0.7).</p>
+                        <ul>
+                            <li>Prevents low-quality retrievals</li>
+                            <li>Adaptive thresholds based on query type</li>
+                            <li>Can be combined with Top-K</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>MMR (Maximal Marginal Relevance)</h4>
+                        <p>Diversity-focused retrieval that balances relevance and diversity.</p>
+                        <ul>
+                            <li>Reduces redundancy in results</li>
+                            <li>Formula: MMR = λ × Relevance - (1-λ) × MaxSimilarity</li>
+                            <li>λ parameter controls relevance vs diversity trade-off</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Metadata Filtering</h4>
+                        <p>Filter results based on metadata before or after vector search.</p>
+                        <ul>
+                            <li><strong>Pre-filter:</strong> Filter before search (faster, but may miss results)</li>
+                            <li><strong>Post-filter:</strong> Filter after search (slower, but more accurate)</li>
+                            <li>Examples: date ranges, document types, access permissions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Retrieval Variants</h3>
+                <div class="card-content">
+                    <h4>Sparse Retrieval (BM25)</h4>
+                    <div class="info-box">
+                        <p><strong>Best Match 25 (BM25)</strong> is a probabilistic ranking function for information retrieval.</p>
+                        <ul>
+                            <li>Based on term frequency and inverse document frequency (TF-IDF)</li>
+                            <li>Handles exact keyword matches well</li>
+                            <li>Fast and interpretable</li>
+                            <li><strong>Use when:</strong> Keyword-heavy queries, exact matches needed, interpretability required</li>
+                        </ul>
+                    </div>
+
+                    <h4>Dense Retrieval</h4>
+                    <div class="info-box">
+                        <p>Uses embedding vectors for semantic similarity search.</p>
+                        <ul>
+                            <li>Captures semantic meaning, not just keywords</li>
+                            <li>Handles synonyms and paraphrasing</li>
+                            <li>Requires embedding model</li>
+                            <li><strong>Use when:</strong> Semantic understanding needed, natural language queries, cross-lingual search</li>
+                        </ul>
+                    </div>
+
+                    <h4>Hybrid Search</h4>
+                    <div class="info-box">
+                        <p>Combines sparse and dense retrieval for best of both worlds.</p>
+                        <ul>
+                            <li><strong>Reciprocal Rank Fusion (RRF):</strong> Combines rankings from both methods</li>
+                            <li><strong>Weighted Combination:</strong> Weighted sum of scores (e.g., 0.3 × BM25 + 0.7 × Dense)</li>
+                            <li><strong>Use when:</strong> Need both keyword and semantic matching, production systems</li>
+                        </ul>
+                    </div>
+
+                    <h4>Reranking</h4>
+                    <div class="info-box">
+                        <h4>Cross-Encoder Reranking</h4>
+                        <p>Uses cross-encoder models (BERT-based) to score query-document pairs more accurately.</p>
+                        <ul>
+                            <li>More accurate than bi-encoder (embedding) models</li>
+                            <li>Slower (can't pre-compute embeddings)</li>
+                            <li>Typically rerank top 20-100 candidates</li>
+                            <li>Models: cross-encoder/ms-marco-MiniLM, bge-reranker</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>LLM Judge Reranking</h4>
+                        <p>Uses LLM to evaluate and rank retrieved documents.</p>
+                        <ul>
+                            <li>Most flexible and context-aware</li>
+                            <li>Can consider complex relevance criteria</li>
+                            <li>Expensive and slow</li>
+                            <li>Use for critical applications or complex queries</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Vanilla RAG Pipeline in Detail</h3>
+                <div class="card-content">
+                    <div class="flow-diagram vertical detailed">
+                        <div class="flow-step">
+                            <div class="flow-icon">1</div>
+                            <h4>Query Understanding</h4>
+                            <p>Parse and normalize user query, extract intent, identify entities</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">2</div>
+                            <h4>Query Embedding</h4>
+                            <p>Convert query to embedding vector using same model as documents</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">3</div>
+                            <h4>Vector Search</h4>
+                            <p>Find top-K similar documents in vector store</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">4</div>
+                            <h4>Rerank</h4>
+                            <p>Optionally rerank results using cross-encoder or LLM judge</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">5</div>
+                            <h4>Context Packing</h4>
+                            <p>Combine retrieved documents into context, respect token limits</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">6</div>
+                            <h4>Prompt Construction</h4>
+                            <p>Build prompt with system instructions, context, and user query</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">7</div>
+                            <h4>Generation</h4>
+                            <p>LLM generates answer based on augmented prompt</p>
+                        </div>
+                    </div>
+
+                    <h4>Single-Shot QA vs Conversation</h4>
+                    <div class="comparison-table">
+                        <div class="comparison-row header">
+                            <div class="comparison-cell">Mode</div>
+                            <div class="comparison-cell">Characteristics</div>
+                            <div class="comparison-cell">Implementation</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Single-Shot QA</strong></div>
+                            <div class="comparison-cell">Each query is independent, no conversation history</div>
+                            <div class="comparison-cell">Simple prompt with query + context, stateless</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Conversation with History</strong></div>
+                            <div class="comparison-cell">Maintains conversation context, follow-up questions</div>
+                            <div class="comparison-cell">Include chat history in prompt, manage conversation state</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Memory-Augmented</strong></div>
+                            <div class="comparison-cell">Persistent memory across sessions, user preferences</div>
+                            <div class="comparison-cell">External memory store, retrieval of relevant memories</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">RAG Architectural Patterns</h3>
+                <div class="card-content">
+                    <h4>Single-Index Architecture</h4>
+                    <div class="info-box">
+                        <p>All documents in one vector index.</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Simple, single query, easy to manage</li>
+                            <li><strong>Cons:</strong> No domain separation, harder to scale</li>
+                            <li><strong>Use when:</strong> Small-scale, single domain, homogeneous content</li>
+                        </ul>
+                    </div>
+
+                    <h4>Multi-Index Architecture</h4>
+                    <div class="info-box">
+                        <p>Separate indexes for different domains or document types.</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Domain-specific optimization, better organization, parallel queries</li>
+                            <li><strong>Cons:</strong> More complex, need to route queries, multiple indexes to maintain</li>
+                            <li><strong>Use when:</strong> Multiple domains, different document types, specialized retrieval needs</li>
+                        </ul>
+                    </div>
+
+                    <h4>Multi-Store Architecture</h4>
+                    <div class="info-box">
+                        <p>Combines vector store with other data stores (SQL, graph, etc.).</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Best tool for each data type, flexible queries</li>
+                            <li><strong>Cons:</strong> Complex integration, query coordination needed</li>
+                            <li><strong>Use when:</strong> Mixed data types, structured + unstructured, complex queries</li>
+                        </ul>
+                    </div>
+
+                    <h4>Multi-Tenancy Patterns</h4>
+                    <div class="info-box">
+                        <h4>Per-Tenant Index</h4>
+                        <p>Separate vector index for each tenant.</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Complete isolation, tenant-specific optimization</li>
+                            <li><strong>Cons:</strong> Higher cost, more indexes to manage</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Shared Index with Row-Level Filters</h4>
+                        <p>Single index with metadata-based filtering for tenant isolation.</p>
+                        <ul>
+                            <li><strong>Pros:</strong> Cost-effective, easier management, cross-tenant analytics possible</li>
+                            <li><strong>Cons:</strong> Requires careful access control, potential for data leakage if misconfigured</li>
+                            <li><strong>Implementation:</strong> Filter by tenant_id in metadata before/after retrieval</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Advanced Retrieval & Knowledge Workflows -->
+        <section id="advanced" class="section">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Advanced Retrieval & Knowledge Workflows</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Advanced RAG Techniques</h3>
+                <div class="card-content">
+                    <h4>Multi-Hop / Multi-Step Retrieval</h4>
+                    <div class="info-box">
+                        <p>Iterative retrieval where each step uses information from previous retrievals.</p>
+                        <ul>
+                            <li><strong>Step 1:</strong> Initial query retrieves relevant documents</li>
+                            <li><strong>Step 2:</strong> Extract entities/concepts from Step 1 results</li>
+                            <li><strong>Step 3:</strong> Query for documents related to extracted entities</li>
+                            <li><strong>Step 4:</strong> Combine results from all steps</li>
+                            <li><strong>Use when:</strong> Complex queries requiring multiple pieces of information, research tasks</li>
+                        </ul>
+                    </div>
+
+                    <h4>Recursive Retrieval</h4>
+                    <div class="info-box">
+                        <p>Retrieves parent documents when child chunks are relevant.</p>
+                        <ul>
+                            <li>If a chunk is retrieved, also retrieve its parent document/section</li>
+                            <li>Provides broader context around relevant chunks</li>
+                            <li>Useful for hierarchical document structures</li>
+                        </ul>
+                    </div>
+
+                    <h4>Query Planning</h4>
+                    <div class="info-box">
+                        <p>LLM generates a plan for breaking down complex queries into sub-queries.</p>
+                        <ul>
+                            <li>Analyze query complexity</li>
+                            <li>Generate sub-questions</li>
+                            <li>Execute sub-queries in sequence or parallel</li>
+                            <li>Synthesize final answer from sub-query results</li>
+                        </ul>
+                    </div>
+
+                    <h4>Query Rewriting and Decomposition</h4>
+                    <div class="info-box">
+                        <h4>Sub-Question Decomposition</h4>
+                        <p>Break complex questions into simpler sub-questions.</p>
+                        <ul>
+                            <li>Example: "What are the benefits and drawbacks of RAG?" → ["What are benefits of RAG?", "What are drawbacks of RAG?"]</li>
+                            <li>Retrieve for each sub-question</li>
+                            <li>Combine answers</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Self-Ask Pattern</h4>
+                        <p>LLM asks itself follow-up questions to gather needed information.</p>
+                        <ul>
+                            <li>Model generates its own questions</li>
+                            <li>Retrieves answers to self-generated questions</li>
+                            <li>Uses answers to respond to original query</li>
+                        </ul>
+                    </div>
+
+                    <h4>Self-RAG</h4>
+                    <div class="info-box">
+                        <p>Model critiques its own retrieval and generation, triggering re-retrieval if needed.</p>
+                        <ul>
+                            <li><strong>Retrieve:</strong> Initial retrieval based on query</li>
+                            <li><strong>Critique:</strong> Model evaluates if retrieved context is sufficient</li>
+                            <li><strong>Re-retrieve:</strong> If insufficient, refine query and retrieve again</li>
+                            <li><strong>Generate:</strong> Generate answer using retrieved context</li>
+                            <li><strong>Self-reflect:</strong> Evaluate answer quality, decide if re-generation needed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Graph and Structured RAG</h3>
+                <div class="card-content">
+                    <h4>GraphRAG Concepts</h4>
+                    <div class="info-box">
+                        <h4>Knowledge Graph Construction</h4>
+                        <p>Extract entities and relationships from documents to build a knowledge graph.</p>
+                        <ul>
+                            <li><strong>Entity Extraction:</strong> Identify people, organizations, concepts, etc.</li>
+                            <li><strong>Relationship Extraction:</strong> Identify connections between entities</li>
+                            <li><strong>Graph Storage:</strong> Store in graph database (Neo4j, Amazon Neptune)</li>
+                            <li><strong>Graph Embeddings:</strong> Create embeddings for nodes and edges</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Graph Search + Embeddings</h4>
+                        <p>Combine graph traversal with vector similarity search.</p>
+                        <ul>
+                            <li><strong>Graph Traversal:</strong> Follow relationships to find connected entities</li>
+                            <li><strong>Vector Search:</strong> Find semantically similar nodes</li>
+                            <li><strong>Hybrid:</strong> Use graph structure to filter/rank vector results</li>
+                            <li><strong>Use when:</strong> Relationships matter, entity-centric queries, complex knowledge domains</li>
+                        </ul>
+                    </div>
+
+                    <h4>Structured Data Integration</h4>
+                    <div class="info-box">
+                        <h4>Vector + SQL/OLAP</h4>
+                        <p>Combine unstructured vector search with structured database queries.</p>
+                        <ul>
+                            <li>Vector search for semantic content</li>
+                            <li>SQL queries for structured data (numbers, dates, categories)</li>
+                            <li>Merge results in final answer</li>
+                            <li>Example: "Find documents about Q4 sales (vector) where revenue > $1M (SQL)"</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Vector + API Tools</h4>
+                        <p>Combine retrieved context with real-time API data.</p>
+                        <ul>
+                            <li>Retrieve relevant documents</li>
+                            <li>Call APIs for real-time data (prices, weather, stock info)</li>
+                            <li>LLM synthesizes both sources</li>
+                            <li>Enables dynamic, up-to-date answers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Workflow / Agent Patterns with RAG</h3>
+                <div class="card-content">
+                    <h4>Agentic Flows</h4>
+                    <p>Multi-step workflows where agents use tools including RAG retrieval.</p>
+
+                    <div class="flow-diagram vertical">
+                        <div class="flow-step">
+                            <div class="flow-icon">🔍</div>
+                            <h4>Search Tool</h4>
+                            <p>Agent uses RAG to search knowledge base</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">📝</div>
+                            <h4>Summarizer</h4>
+                            <p>Summarize retrieved documents</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">✍️</div>
+                            <h4>Writer</h4>
+                            <p>Generate final response based on summary</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">✓</div>
+                            <h4>Validator</h4>
+                            <p>Verify answer quality and fact-check</p>
+                        </div>
+                    </div>
+
+                    <h4>Task-Oriented Workflows</h4>
+                    <div class="source-grid">
+                        <div class="source-item">
+                            <h4>Summarization</h4>
+                            <ul>
+                                <li>Retrieve relevant documents</li>
+                                <li>Extract key points</li>
+                                <li>Generate concise summary</li>
+                                <li>Use: Meeting notes, research papers, long documents</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Comparison</h4>
+                            <ul>
+                                <li>Retrieve documents about each item</li>
+                                <li>Extract features/attributes</li>
+                                <li>Compare side-by-side</li>
+                                <li>Use: Product comparison, policy analysis</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Decision Support</h4>
+                            <ul>
+                                <li>Retrieve relevant policies/guidelines</li>
+                                <li>Analyze current situation</li>
+                                <li>Recommend actions</li>
+                                <li>Use: Compliance, risk assessment</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Report Generation</h4>
+                            <ul>
+                                <li>Retrieve data from multiple sources</li>
+                                <li>Synthesize information</li>
+                                <li>Generate structured report</li>
+                                <li>Use: Status reports, analysis reports</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Enterprise Knowledge Management Workflows</h3>
+                <div class="card-content">
+                    <h4>Use Cases</h4>
+                    <div class="source-grid">
+                        <div class="source-item">
+                            <h4>Internal KB Search</h4>
+                            <ul>
+                                <li>Company documentation search</li>
+                                <li>Employee self-service</li>
+                                <li>Knowledge discovery</li>
+                                <li>Onboarding assistance</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Policy Assistants</h4>
+                            <ul>
+                                <li>HR policy queries</li>
+                                <li>Compliance checking</li>
+                                <li>Regulatory guidance</li>
+                                <li>Procedure lookup</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Project Knowledge Discovery</h4>
+                            <ul>
+                                <li>Find related projects</li>
+                                <li>Learn from past projects</li>
+                                <li>Identify experts</li>
+                                <li>Best practices discovery</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>Governance Workflows</h4>
+                    <div class="flow-diagram vertical">
+                        <div class="flow-step">
+                            <div class="flow-icon">📥</div>
+                            <h4>Content Lifecycle</h4>
+                            <p>Ingestion → Processing → Indexing → Serving → Archival</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">✏️</div>
+                            <h4>Curation</h4>
+                            <p>Review, tag, categorize, quality check</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">✓</div>
+                            <h4>Approval</h4>
+                            <p>Subject matter expert review, approval workflow</p>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">📦</div>
+                            <h4>Archival</h4>
+                            <p>Version control, deprecation, removal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Quality, Evaluation, and Production -->
+        <section id="quality" class="section">
+            <div class="section-header">
+                <span class="section-number">05</span>
+                <h2 class="section-title">Quality, Evaluation, and Production</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Retrieval Evaluation</h3>
+                <div class="card-content">
+                    <h4>Ground-Truth Datasets</h4>
+                    <p>Create evaluation datasets with query-answer pairs and relevant document IDs.</p>
+                    <ul>
+                        <li><strong>QA Datasets:</strong> Question-answer pairs with source documents</li>
+                        <li><strong>Relevance Labels:</strong> Human-annotated relevance scores for query-document pairs</li>
+                        <li><strong>Benchmark Datasets:</strong> MS MARCO, Natural Questions, SQuAD, BEIR</li>
+                    </ul>
+
+                    <h4>Retrieval Metrics</h4>
+                    <div class="info-box">
+                        <h4>Hit Rate</h4>
+                        <p>Percentage of queries where at least one relevant document is retrieved in top-K.</p>
+                        <p>Formula: (Queries with at least 1 relevant doc) / (Total queries)</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Recall@K</h4>
+                        <p>Percentage of relevant documents retrieved in top-K results.</p>
+                        <p>Formula: (Relevant docs retrieved) / (Total relevant docs)</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>NDCG (Normalized Discounted Cumulative Gain)</h4>
+                        <p>Measures ranking quality, giving higher weight to top positions.</p>
+                        <ul>
+                            <li>Accounts for position of relevant documents</li>
+                            <li>Range: 0 to 1 (higher is better)</li>
+                            <li>Best for: Ranking evaluation</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>MRR (Mean Reciprocal Rank)</h4>
+                        <p>Average of reciprocal ranks of first relevant document.</p>
+                        <p>Formula: (1 / rank of first relevant) averaged across queries</p>
+                    </div>
+
+                    <h4>Per-Component Evaluation</h4>
+                    <ul>
+                        <li><strong>Retriever:</strong> Evaluate retrieval quality independently (Hit Rate, Recall@K)</li>
+                        <li><strong>Reranker:</strong> Evaluate ranking improvement (NDCG improvement)</li>
+                        <li><strong>Generator:</strong> Evaluate answer quality given perfect retrieval (faithfulness, relevance)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Generation Evaluation</h3>
+                <div class="card-content">
+                    <h4>Answer Quality Metrics</h4>
+                    <div class="info-box">
+                        <h4>Faithfulness</h4>
+                        <p>Answer is grounded in retrieved context, no hallucinations.</p>
+                        <ul>
+                            <li>Check if claims are supported by context</li>
+                            <li>Detect contradictions</li>
+                            <li>Methods: NLI models, LLM-as-judge, fact-checking</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Relevance</h4>
+                        <p>Answer addresses the query.</p>
+                        <ul>
+                            <li>Does answer match query intent?</li>
+                            <li>Is information complete?</li>
+                            <li>Methods: Semantic similarity, LLM-as-judge</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Completeness</h4>
+                        <p>Answer covers all aspects of the query.</p>
+                        <ul>
+                            <li>No missing information</li>
+                            <li>All sub-questions addressed</li>
+                            <li>Methods: Coverage analysis, LLM-as-judge</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Style</h4>
+                        <p>Answer matches desired tone and format.</p>
+                        <ul>
+                            <li>Formal vs casual</li>
+                            <li>Technical vs simple</li>
+                            <li>Length and structure</li>
+                        </ul>
+                    </div>
+
+                    <h4>Evaluation Methods</h4>
+                    <div class="comparison-table">
+                        <div class="comparison-row header">
+                            <div class="comparison-cell">Method</div>
+                            <div class="comparison-cell">Pros</div>
+                            <div class="comparison-cell">Cons</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>LLM-as-Judge</strong></div>
+                            <div class="comparison-cell">Flexible, understands context, scalable</div>
+                            <div class="comparison-cell">Cost, potential bias, less interpretable</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Human Evaluation</strong></div>
+                            <div class="comparison-cell">Most accurate, understands nuance</div>
+                            <div class="comparison-cell">Expensive, slow, subjective</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div class="comparison-cell"><strong>Automated Metrics</strong></div>
+                            <div class="comparison-cell">Fast, cheap, reproducible</div>
+                            <div class="comparison-cell">May not capture quality, limited scope</div>
+                        </div>
+                    </div>
+
+                    <h4>Common Issues</h4>
+                    <div class="info-box warning">
+                        <h4>Hallucination Detection</h4>
+                        <p>Answers contain information not in retrieved context.</p>
+                        <ul>
+                            <li>Use NLI (Natural Language Inference) models to check if claims are entailed by context</li>
+                            <li>LLM-as-judge to verify faithfulness</li>
+                            <li>Citation tracking to ensure all claims have sources</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box warning">
+                        <h4>"Lost in the Middle" Problem</h4>
+                        <p>LLMs pay more attention to the beginning and end of context, missing information in the middle.</p>
+                        <ul>
+                            <li>Reorder retrieved documents (most relevant in middle)</li>
+                            <li>Limit context size</li>
+                            <li>Use attention mechanisms that emphasize important parts</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box warning">
+                        <h4>Context Over-/Under-Stuffing</h4>
+                        <p>Too much or too little context affects answer quality.</p>
+                        <ul>
+                            <li><strong>Over-stuffing:</strong> Too many documents dilute focus, increase cost/latency</li>
+                            <li><strong>Under-stuffing:</strong> Missing relevant information leads to incomplete answers</li>
+                            <li><strong>Solution:</strong> Adaptive retrieval (start with K=5, expand if needed)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Prompt & Context Engineering</h3>
+                <div class="card-content">
+                    <h4>Context Window Budgeting</h4>
+                    <p>Manage limited context windows efficiently:</p>
+                    <ul>
+                        <li><strong>System Prompt:</strong> 200-500 tokens (instructions, guidelines)</li>
+                        <li><strong>Retrieved Context:</strong> 2000-4000 tokens (documents)</li>
+                        <li><strong>User Query:</strong> 50-200 tokens</li>
+                        <li><strong>Response Buffer:</strong> 500-1000 tokens (for generation)</li>
+                        <li><strong>Total Budget:</strong> Typically 4K-8K tokens for most models</li>
+                    </ul>
+
+                    <h4>Formatting Citations and Quotes</h4>
+                    <div class="code-block">
+                        <div class="code-header">Example Prompt with Citations</div>
+                        <pre><code>System: You are a helpful assistant. Always cite sources using [1], [2], etc.
+
+Context:
+[1] Source: document1.pdf, Page 5
+"RAG improves answer quality by providing external context."
+
+[2] Source: document2.pdf, Section 3.2
+"Vector similarity search enables semantic retrieval."
+
+User: How does RAG work?
+
+Assistant: RAG works by retrieving relevant documents [1] and using 
+semantic search [2] to find context...</code></pre>
+                    </div>
+
+                    <h4>Source Attribution</h4>
+                    <ul>
+                        <li>Include document IDs, URLs, or titles in context</li>
+                        <li>Request citations in system prompt</li>
+                        <li>Parse citations from LLM output</li>
+                        <li>Link citations back to original sources</li>
+                    </ul>
+
+                    <h4>System Prompts</h4>
+                    <div class="info-box">
+                        <h4>Grounding</h4>
+                        <p>Instructions to base answers only on provided context.</p>
+                        <p>Example: "Only use information from the provided context. If the answer is not in the context, say 'I don't have that information.'"</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Safety</h4>
+                        <p>Guidelines for handling sensitive or harmful content.</p>
+                        <p>Example: "Do not generate harmful, biased, or inappropriate content. Refuse to answer questions about illegal activities."</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Tool Calling</h4>
+                        <p>Instructions for when and how to use tools.</p>
+                        <p>Example: "Use the search tool when you need additional information. Use the calculator for mathematical operations."</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Refusal Behaviors</h4>
+                        <p>When to refuse answering.</p>
+                        <p>Example: "Refuse to answer if: (1) information is not in context, (2) query is harmful, (3) query violates policies."</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Scaling & Operations</h3>
+                <div class="card-content">
+                    <h4>Latency and Cost Optimization</h4>
+                    
+                    <div class="info-box">
+                        <h4>Caching Strategies</h4>
+                        <ul>
+                            <li><strong>Query Caching:</strong> Cache query embeddings and results for repeated queries</li>
+                            <li><strong>Context Caching:</strong> Cache frequently retrieved document contexts</li>
+                            <li><strong>Generation Caching:</strong> Cache LLM responses for identical queries</li>
+                            <li><strong>TTL (Time-To-Live):</strong> Set expiration for cached content</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Approximate Search</h4>
+                        <ul>
+                            <li>Use approximate nearest neighbor (ANN) algorithms instead of exact search</li>
+                            <li>Trade slight accuracy for significant speed improvement</li>
+                            <li>Examples: HNSW (Hierarchical Navigable Small World), IVF (Inverted File Index)</li>
+                            <li>Speedup: 10-100x faster than exact search</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Batching</h4>
+                        <ul>
+                            <li>Batch embedding generation for multiple documents</li>
+                            <li>Batch LLM inference for multiple queries</li>
+                            <li>Reduces API calls and improves throughput</li>
+                            <li>Trade-off: Slightly higher latency for individual requests</li>
+                        </ul>
+                    </div>
+
+                    <h4>Index Maintenance</h4>
+                    <div class="info-box">
+                        <h4>Re-embedding</h4>
+                        <p>When to re-embed documents:</p>
+                        <ul>
+                            <li>New embedding model available (better quality)</li>
+                            <li>Document updates (content changed)</li>
+                            <li>Schema changes (metadata structure changed)</li>
+                            <li>Migration strategy: Gradual migration vs full re-embedding</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Deletions</h4>
+                        <p>Handling document removal:</p>
+                        <ul>
+                            <li>Soft delete: Mark as deleted, filter in queries</li>
+                            <li>Hard delete: Remove from index immediately</li>
+                            <li>Cascade deletes: Remove all chunks when parent deleted</li>
+                            <li>Versioning: Keep old versions for audit trail</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Drift Management</h4>
+                        <p>Handling changes over time:</p>
+                        <ul>
+                            <li><strong>Model Drift:</strong> New embedding models may change similarity scores</li>
+                            <li><strong>Schema Drift:</strong> Metadata schema changes require migration</li>
+                            <li><strong>Content Drift:</strong> Documents updated but embeddings not refreshed</li>
+                            <li><strong>Solution:</strong> Version tracking, migration scripts, monitoring</li>
+                        </ul>
+                    </div>
+
+                    <h4>Monitoring</h4>
+                    <div class="source-grid">
+                        <div class="source-item">
+                            <h4>Usage Analytics</h4>
+                            <ul>
+                                <li>Query volume and patterns</li>
+                                <li>Popular queries and documents</li>
+                                <li>User engagement metrics</li>
+                                <li>Peak usage times</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Feedback Loops</h4>
+                            <ul>
+                                <li>User ratings (thumbs up/down)</li>
+                                <li>Correction submissions</li>
+                                <li>Reported issues</li>
+                                <li>Usage patterns</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Drift Detection</h4>
+                            <ul>
+                                <li>Retrieval quality trends</li>
+                                <li>Answer quality degradation</li>
+                                <li>Model performance changes</li>
+                                <li>Anomaly detection</li>
+                            </ul>
+                        </div>
+                        <div class="source-item">
+                            <h4>Regression Tracking</h4>
+                            <ul>
+                                <li>A/B testing results</li>
+                                <li>Version comparisons</li>
+                                <li>Performance benchmarks</li>
+                                <li>Quality metrics over time</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Security & Compliance</h3>
+                <div class="card-content">
+                    <h4>Access Control in Retrieval</h4>
+                    <div class="info-box">
+                        <h4>Row-Level Security</h4>
+                        <p>Filter documents based on user permissions before retrieval.</p>
+                        <ul>
+                            <li>Check user roles/permissions</li>
+                            <li>Apply metadata filters (department, team, clearance level)</li>
+                            <li>Pre-filter or post-filter based on performance needs</li>
+                            <li>Audit all access attempts</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Tenant Isolation</h4>
+                        <p>Ensure multi-tenant systems don't leak data between tenants.</p>
+                        <ul>
+                            <li>Separate indexes per tenant (strongest isolation)</li>
+                            <li>Shared index with tenant_id filtering (cost-effective)</li>
+                            <li>Validate filters at multiple layers</li>
+                            <li>Test isolation regularly</li>
+                        </ul>
+                    </div>
+
+                    <h4>Data Protection</h4>
+                    <div class="info-box">
+                        <h4>PII/PHI Redaction</h4>
+                        <p>Remove or mask sensitive information.</p>
+                        <ul>
+                            <li>Detect PII (SSN, email, phone) and PHI (medical records)</li>
+                            <li>Redact before indexing or at query time</li>
+                            <li>Use NER (Named Entity Recognition) models</li>
+                            <li>Comply with GDPR, HIPAA, CCPA</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Data Residency</h4>
+                        <p>Store data in specific geographic regions.</p>
+                        <ul>
+                            <li>Choose vector store region based on requirements</li>
+                            <li>Ensure LLM API calls comply with data residency</li>
+                            <li>Track data location in metadata</li>
+                            <li>Comply with regional regulations (EU, US, etc.)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Audit and Compliance</h4>
+                    <div class="info-box">
+                        <h4>Audit Trails</h4>
+                        <p>Log all access and operations.</p>
+                        <ul>
+                            <li>Query logs (who, what, when)</li>
+                            <li>Document access logs</li>
+                            <li>Modification history</li>
+                            <li>Retention policies</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Policy-Aware Answering</h4>
+                        <p>Ensure answers comply with organizational policies.</p>
+                        <ul>
+                            <li>Check policies before generating answers</li>
+                            <li>Refuse to answer policy-violating queries</li>
+                            <li>Include policy disclaimers when needed</li>
+                            <li>Regular policy updates and compliance checks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Comprehensive guide to Retrieval-Augmented Generation.</p>
+            <p>Designed & Developed By: Prateek Dutta</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+      
